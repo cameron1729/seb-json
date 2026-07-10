@@ -1,0 +1,20 @@
+name: SEB Win v3.10.1 / macOS 3.6.1
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: conformance-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  conformance:
+    uses: ./.github/workflows/conformance-run.yml
+    with:
+      windows-ref: 7ac2458fab39d2bee68fbadb9b9b119f2e740ce1 # v3.10.1
+      macos-ref: 5cdbc50833e1db8c9949dfe2f65ad1853f833184 # 3.6.1

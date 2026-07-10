@@ -1,0 +1,171 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended",
+        "helpers:pinGitHubActionDigests"
+    ],
+    "enabledManagers": [
+        "composer",
+        "github-actions",
+        "custom.regex"
+    ],
+    "branchPrefix": "renovate/",
+    "timezone": "Australia/Perth",
+    "dependencyDashboard": false,
+    "automerge": false,
+    "vulnerabilityAlerts": {
+        "automerge": false,
+        "assignees": [
+            "cameron1729"
+        ]
+    },
+    "customManagers": [
+        {
+            "customType": "regex",
+            "description": "Update Safe Exam Browser Windows release references",
+            "managerFilePatterns": [
+                "/^\\.github/workflows/conformance\\.yml$/",
+                "/^README\\.md$/",
+                "/^src/SebJson\\.php$/",
+                "/^tests/conformance/README\\.md$/"
+            ],
+            "matchStrings": [
+                "windows-ref:\\s+(?<currentDigest>[0-9a-f]{40})\\s+#\\s+(?<currentValue>v?\\d+(?:\\.\\d+)+)",
+                "SEB Win (?<currentValue>v?\\d+(?:\\.\\d+)+) / macOS",
+                "SEB for Windows (?<currentValue>v?\\d+(?:\\.\\d+)+)",
+                "github\\.com/SafeExamBrowser/seb-win-refactoring/blob/(?<currentValue>v?\\d+(?:\\.\\d+)+)/"
+            ],
+            "depNameTemplate": "SafeExamBrowser/seb-win-refactoring",
+            "datasourceTemplate": "github-releases",
+            "versioningTemplate": "semver-coerced"
+        },
+        {
+            "customType": "regex",
+            "description": "Update Safe Exam Browser macOS release references",
+            "managerFilePatterns": [
+                "/^\\.github/workflows/conformance\\.yml$/",
+                "/^README\\.md$/",
+                "/^src/SebJson\\.php$/",
+                "/^tests/conformance/README\\.md$/"
+            ],
+            "matchStrings": [
+                "macos-ref:\\s+(?<currentDigest>[0-9a-f]{40})\\s+#\\s+(?<currentValue>v?\\d+(?:\\.\\d+)+)",
+                "SEB Win v?\\d+(?:\\.\\d+)+ / macOS (?<currentValue>v?\\d+(?:\\.\\d+)+)",
+                "SEB for macOS (?<currentValue>v?\\d+(?:\\.\\d+)+)",
+                "github\\.com/SafeExamBrowser/seb-mac/blob/(?<currentValue>v?\\d+(?:\\.\\d+)+)/"
+            ],
+            "depNameTemplate": "SafeExamBrowser/seb-mac",
+            "datasourceTemplate": "github-releases",
+            "versioningTemplate": "semver-coerced"
+        },
+        {
+            "customType": "regex",
+            "description": "Detect newly released stable PHP versions",
+            "managerFilePatterns": [
+                "/^\\.github/php-support\\.json$/"
+            ],
+            "matchStrings": [
+                "\"upstream\":\\s*\\{\\s*\"php\":\\s*\"(?<currentValue>\\d+\\.\\d+)\""
+            ],
+            "depNameTemplate": "php/php-src",
+            "datasourceTemplate": "github-tags",
+            "extractVersionTemplate": "^php-(?<version>\\d+\\.\\d+)\\.0$",
+            "versioningTemplate": "semver-coerced"
+        },
+        {
+            "customType": "regex",
+            "description": "Detect newly released stable Moodle versions",
+            "managerFilePatterns": [
+                "/^\\.github/php-support\\.json$/"
+            ],
+            "matchStrings": [
+                "\"upstream\":\\s*\\{\\s*\"php\":\\s*\"\\d+\\.\\d+\",\\s*\"moodle\":\\s*\"(?<currentValue>\\d+\\.\\d+)\""
+            ],
+            "depNameTemplate": "moodle/moodle",
+            "datasourceTemplate": "github-tags",
+            "extractVersionTemplate": "^v(?<version>\\d+\\.\\d+)\\.0$",
+            "versioningTemplate": "semver-coerced"
+        }
+    ],
+    "packageRules": [
+        {
+            "description": "Keep GitHub Actions current and reproducibly pinned",
+            "matchManagers": [
+                "github-actions"
+            ],
+            "groupName": "GitHub Actions",
+            "groupSlug": "github-actions",
+            "automerge": false,
+            "assignees": [
+                "cameron1729"
+            ]
+        },
+        {
+            "description": "Keep Composer development tools current",
+            "matchManagers": [
+                "composer"
+            ],
+            "matchDepTypes": [
+                "require-dev"
+            ],
+            "groupName": "Composer development tools",
+            "groupSlug": "composer-development-tools",
+            "rangeStrategy": "widen",
+            "automerge": false,
+            "assignees": [
+                "cameron1729"
+            ]
+        },
+        {
+            "description": "PHP support is generated from the Moodle support policy",
+            "matchManagers": [
+                "composer"
+            ],
+            "matchDepNames": [
+                "php"
+            ],
+            "enabled": false
+        },
+        {
+            "description": "Keep the two SEB reference implementations together",
+            "matchManagers": [
+                "custom.regex"
+            ],
+            "matchDepNames": [
+                "SafeExamBrowser/seb-win-refactoring",
+                "SafeExamBrowser/seb-mac"
+            ],
+            "groupName": "SEB reference implementations",
+            "groupSlug": "seb-reference-implementations",
+            "ignoreUnstable": true,
+            "rollbackPrs": true,
+            "automerge": false,
+            "assignees": [
+                "cameron1729"
+            ],
+            "prBodyNotes": [
+                "The conformance workflows compile and test these upstream SEB releases. Merge only after all checks pass."
+            ]
+        },
+        {
+            "description": "Regenerate and test support for new PHP and Moodle releases",
+            "matchManagers": [
+                "custom.regex"
+            ],
+            "matchDepNames": [
+                "php/php-src",
+                "moodle/moodle"
+            ],
+            "groupName": "PHP and Moodle support",
+            "groupSlug": "php-moodle-support",
+            "ignoreUnstable": true,
+            "automerge": false,
+            "assignees": [
+                "cameron1729"
+            ],
+            "prBodyNotes": [
+                "The support workflow regenerates the Moodle compatibility policy and complete PHP matrix from these upstream releases. Merge only after all checks pass."
+            ]
+        }
+    ]
+}

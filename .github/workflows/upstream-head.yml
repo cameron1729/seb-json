@@ -1,0 +1,14 @@
+name: SEB Upstream Head (Manual)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    uses: ./.github/workflows/conformance-run.yml
+    with:
+      windows-ref: master
+      macos-ref: main

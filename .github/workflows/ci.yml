@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  automation:
+    name: Workflow automation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Validate workflow syntax
+        uses: docker://rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
+
+      - name: Audit workflow security
+        uses: docker://ghcr.io/zizmorcore/zizmor:1.26.1@sha256:d1117e5dbd9ee4970644067b534ab6ab50371f3c6f7f4d05446eb603a6e78f48
+        with:
+          args: --offline .
+
+  support:
+    name: PHP support matrix
+    runs-on: ubuntu-latest
+
+    outputs:
+      latest: ${{ steps.support.outputs.latest }}
+      versions: ${{ steps.support.outputs.versions }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Read PHP support manifest
+        id: support
+        run: |
+          echo "latest=$(jq --exit-status --raw-output '.latestPhp' .github/php-support.json)" >> "$GITHUB_OUTPUT"
+          echo "versions=$(jq --exit-status --compact-output '.phpVersions' .github/php-support.json)" >> "$GITHUB_OUTPUT"
+
+  test:
+    name: PHP ${{ matrix.php }}
+    needs: support
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ${{ fromJSON(needs.support.outputs.versions) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          extensions: dom, mbstring, simplexml, xml, xmlwriter
+          tools: composer:v2
+
+      - name: Validate Composer metadata
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Validate platform requirements
+        run: composer check-platform-reqs --lock
+
+      - name: Audit Composer dependencies
+        run: composer audit --locked
+
+      - name: Run checks
+        run: composer check
+
+  coverage:
+    name: Coverage
+    needs: support
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: ${{ needs.support.outputs.latest }}
+          coverage: pcov
+          extensions: dom, mbstring, simplexml, xml, xmlwriter
+          tools: composer:v2
+
+      - name: Validate Composer metadata
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Check coverage
+        run: composer coverage

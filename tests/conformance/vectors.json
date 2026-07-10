@@ -1,0 +1,477 @@
+{
+    "SPDX-FileCopyrightText": "2026 Cameron Ball",
+    "SPDX-License-Identifier": "GPL-3.0-or-later",
+    "vectors": [
+        {
+            "name": "string-empty",
+            "value": {
+                "type": "string",
+                "base64": ""
+            }
+        },
+        {
+            "name": "string-plain",
+            "value": {
+                "type": "string",
+                "base64": "cGxhaW4gdGV4dA=="
+            }
+        },
+        {
+            "name": "string-quote",
+            "value": {
+                "type": "string",
+                "base64": "c2F5ICJoZWxsbyI="
+            }
+        },
+        {
+            "name": "string-backslash",
+            "value": {
+                "type": "string",
+                "base64": "d3M6XGxvY2FsaG9zdDo4NzA2"
+            }
+        },
+        {
+            "name": "string-controls",
+            "value": {
+                "type": "string",
+                "base64": "AAkKDQ=="
+            }
+        },
+        {
+            "name": "string-unicode",
+            "value": {
+                "type": "string",
+                "base64": "5L6D552m"
+            }
+        },
+        {
+            "name": "string-emoji",
+            "value": {
+                "type": "string",
+                "base64": "ZXhhbSDwn5SS"
+            }
+        },
+        {
+            "name": "integer-zero",
+            "value": {
+                "type": "integer",
+                "decimal": "0"
+            }
+        },
+        {
+            "name": "integer-positive",
+            "value": {
+                "type": "integer",
+                "decimal": "42"
+            }
+        },
+        {
+            "name": "integer-negative",
+            "value": {
+                "type": "integer",
+                "decimal": "-42"
+            }
+        },
+        {
+            "name": "integer-minimum-shared",
+            "value": {
+                "type": "integer",
+                "decimal": "-2147483648"
+            }
+        },
+        {
+            "name": "integer-maximum-shared",
+            "value": {
+                "type": "integer",
+                "decimal": "2147483647"
+            }
+        },
+        {
+            "name": "integer-below-shared-range",
+            "value": {
+                "type": "integer",
+                "decimal": "-2147483649"
+            }
+        },
+        {
+            "name": "integer-above-shared-range",
+            "value": {
+                "type": "integer",
+                "decimal": "2147483648"
+            }
+        },
+        {
+            "name": "boolean-false",
+            "value": {
+                "type": "boolean",
+                "boolean": false
+            }
+        },
+        {
+            "name": "boolean-true",
+            "value": {
+                "type": "boolean",
+                "boolean": true
+            }
+        },
+        {
+            "name": "null",
+            "value": {
+                "type": "null"
+            }
+        },
+        {
+            "name": "float-zero",
+            "value": {
+                "type": "float",
+                "hex": "0000000000000000"
+            }
+        },
+        {
+            "name": "float-negative-zero",
+            "value": {
+                "type": "float",
+                "hex": "8000000000000000"
+            }
+        },
+        {
+            "name": "float-one-tenth",
+            "value": {
+                "type": "float",
+                "hex": "3fb999999999999a"
+            }
+        },
+        {
+            "name": "float-one-fifth",
+            "value": {
+                "type": "float",
+                "hex": "3fc999999999999a"
+            }
+        },
+        {
+            "name": "float-one",
+            "value": {
+                "type": "float",
+                "hex": "3ff0000000000000"
+            }
+        },
+        {
+            "name": "float-quarter",
+            "value": {
+                "type": "float",
+                "hex": "3fd0000000000000"
+            }
+        },
+        {
+            "name": "float-negative-one-tenth",
+            "value": {
+                "type": "float",
+                "hex": "bfb999999999999a"
+            }
+        },
+        {
+            "name": "float-simple-decimal",
+            "value": {
+                "type": "float",
+                "hex": "3fbf9a6b50b0f27c"
+            }
+        },
+        {
+            "name": "float-high-precision",
+            "value": {
+                "type": "float",
+                "hex": "3ff3c0ca428c59fb"
+            }
+        },
+        {
+            "name": "float-fixed-lower-boundary",
+            "value": {
+                "type": "float",
+                "hex": "3f1a36e2eb1c432d"
+            }
+        },
+        {
+            "name": "float-scientific-negative-five",
+            "value": {
+                "type": "float",
+                "hex": "3ee4f8b588e368f1"
+            }
+        },
+        {
+            "name": "float-scientific-negative-six",
+            "value": {
+                "type": "float",
+                "hex": "3eb0c6f7a0b5ed8d"
+            }
+        },
+        {
+            "name": "float-large-fixed",
+            "value": {
+                "type": "float",
+                "hex": "42d6bcc41e900000"
+            }
+        },
+        {
+            "name": "float-windows-scientific-boundary",
+            "value": {
+                "type": "float",
+                "hex": "430c6bf526340000"
+            }
+        },
+        {
+            "name": "float-large-scientific",
+            "value": {
+                "type": "float",
+                "hex": "4341c37937e08000"
+            }
+        },
+        {
+            "name": "float-very-large",
+            "value": {
+                "type": "float",
+                "hex": "4415af1d78b58c40"
+            }
+        },
+        {
+            "name": "float-minimum-normal",
+            "value": {
+                "type": "float",
+                "hex": "0010000000000000"
+            }
+        },
+        {
+            "name": "float-minimum-subnormal",
+            "value": {
+                "type": "float",
+                "hex": "0000000000000001"
+            }
+        },
+        {
+            "name": "float-maximum-finite",
+            "value": {
+                "type": "float",
+                "hex": "7fefffffffffffff"
+            }
+        },
+        {
+            "name": "list-empty",
+            "value": {
+                "type": "list",
+                "items": []
+            }
+        },
+        {
+            "name": "list-scalars",
+            "value": {
+                "type": "list",
+                "items": [
+                    {
+                        "type": "string",
+                        "base64": "YWxwaGE="
+                    },
+                    {
+                        "type": "integer",
+                        "decimal": "42"
+                    },
+                    {
+                        "type": "boolean",
+                        "boolean": true
+                    },
+                    {
+                        "type": "float",
+                        "hex": "3fd0000000000000"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "list-string-edges",
+            "value": {
+                "type": "list",
+                "items": [
+                    {
+                        "type": "string",
+                        "base64": "c2F5ICJoZWxsbyI="
+                    },
+                    {
+                        "type": "string",
+                        "base64": "d3M6XGxvY2FsaG9zdDo4NzA2"
+                    },
+                    {
+                        "type": "string",
+                        "base64": "5L6D552m"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "list-dictionaries",
+            "value": {
+                "type": "list",
+                "items": [
+                    {
+                        "type": "map",
+                        "entries": [
+                            {
+                                "key": "YWxwaGE=",
+                                "value": {
+                                    "type": "string",
+                                    "base64": "b25l"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "map",
+                        "entries": [
+                            {
+                                "key": "YmV0YQ==",
+                                "value": {
+                                    "type": "integer",
+                                    "decimal": "2"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "name": "map-scalars",
+            "value": {
+                "type": "map",
+                "entries": [
+                    {
+                        "key": "YWxwaGE=",
+                        "value": {
+                            "type": "string",
+                            "base64": "b25l"
+                        }
+                    },
+                    {
+                        "key": "YmV0YQ==",
+                        "value": {
+                            "type": "boolean",
+                            "boolean": true
+                        }
+                    },
+                    {
+                        "key": "Y291bnQ=",
+                        "value": {
+                            "type": "integer",
+                            "decimal": "42"
+                        }
+                    },
+                    {
+                        "key": "cmF0aW8=",
+                        "value": {
+                            "type": "float",
+                            "hex": "3fd0000000000000"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "map-quote-key",
+            "value": {
+                "type": "map",
+                "entries": [
+                    {
+                        "key": "cXVvdGUia2V5",
+                        "value": {
+                            "type": "string",
+                            "base64": "dmFsdWU="
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "map-unicode-key",
+            "value": {
+                "type": "map",
+                "entries": [
+                    {
+                        "key": "5L6D552mLWtleQ==",
+                        "value": {
+                            "type": "string",
+                            "base64": "dmFsdWU="
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "map-nested",
+            "value": {
+                "type": "map",
+                "entries": [
+                    {
+                        "key": "YWxwaGE=",
+                        "value": {
+                            "type": "map",
+                            "entries": [
+                                {
+                                    "key": "aW5uZXI=",
+                                    "value": {
+                                        "type": "string",
+                                        "base64": "dmFsdWU="
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "key": "YmV0YQ==",
+                        "value": {
+                            "type": "list",
+                            "items": [
+                                {
+                                    "type": "string",
+                                    "base64": "cGxhaW4gdGV4dA=="
+                                },
+                                {
+                                    "type": "integer",
+                                    "decimal": "-42"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "key": "Z2FtbWE=",
+                        "value": {
+                            "type": "list",
+                            "items": [
+                                {
+                                    "type": "map",
+                                    "entries": [
+                                        {
+                                            "key": "Zmlyc3Q=",
+                                            "value": {
+                                                "type": "boolean",
+                                                "boolean": true
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "map",
+                                    "entries": [
+                                        {
+                                            "key": "c2Vjb25k",
+                                            "value": {
+                                                "type": "string",
+                                                "base64": "5L6D552m"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

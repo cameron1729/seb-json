@@ -1,0 +1,137 @@
+name: Run SEB Conformance
+
+on:
+  workflow_call:
+    inputs:
+      windows-ref:
+        description: Safe Exam Browser Windows Git reference.
+        required: true
+        type: string
+      macos-ref:
+        description: Safe Exam Browser macOS Git reference.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  windows-reference:
+    name: Windows reference
+    runs-on: windows-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout seb-json
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Checkout SEB Windows
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          repository: SafeExamBrowser/seb-win-refactoring
+          ref: ${{ inputs.windows-ref }}
+          path: upstream/seb-win
+          persist-credentials: false
+
+      - name: Compile and run reference encoder
+        shell: pwsh
+        run: |
+          $sebSource = Join-Path $env:GITHUB_WORKSPACE 'upstream\seb-win\SafeExamBrowser.Configuration\ConfigurationData'
+          dotnet build tests\conformance\windows\Reference.csproj --configuration Release "-p:SebSource=$sebSource"
+
+          $reference = Join-Path $env:GITHUB_WORKSPACE 'tests\conformance\windows\bin\Release\net48\Reference.exe'
+          $vectors = Join-Path $env:GITHUB_WORKSPACE 'tests\conformance\vectors.json'
+          $results = Join-Path $env:RUNNER_TEMP 'windows.tsv'
+          & $reference $vectors $results
+
+      - name: Upload Windows results
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: seb-json-windows-reference
+          path: ${{ runner.temp }}/windows.tsv
+          if-no-files-found: error
+          retention-days: 1
+
+  macos-reference:
+    name: macOS reference
+    runs-on: macos-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout seb-json
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Checkout SEB macOS
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          repository: SafeExamBrowser/seb-mac
+          ref: ${{ inputs.macos-ref }}
+          path: upstream/seb-mac
+          persist-credentials: false
+
+      - name: Compile and run reference encoder
+        run: >-
+          bash tests/conformance/macos/build-reference.sh
+          upstream/seb-mac/Classes/Cryptography/SEBCryptor.m
+          tests/conformance/vectors.json
+          "$RUNNER_TEMP/macos.tsv"
+
+      - name: Upload macOS results
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: seb-json-macos-reference
+          path: ${{ runner.temp }}/macos.tsv
+          if-no-files-found: error
+          retention-days: 1
+
+  verify:
+    name: Verify PHP encoder
+    needs:
+      - windows-reference
+      - macos-reference
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout seb-json
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+
+      - name: Read latest supported PHP
+        id: support
+        run: echo "latest=$(jq --exit-status --raw-output '.latestPhp' .github/php-support.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: ${{ steps.support.outputs.latest }}
+          coverage: none
+          extensions: dom, mbstring, simplexml, xml, xmlwriter
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Download Windows results
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: seb-json-windows-reference
+          path: reference/windows
+
+      - name: Download macOS results
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: seb-json-macos-reference
+          path: reference/macos
+
+      - name: Compare encoders
+        run: >-
+          php tests/conformance/verify.php
+          tests/conformance/vectors.json
+          reference/windows/windows.tsv
+          reference/macos/macos.tsv

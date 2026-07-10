@@ -1,0 +1,35 @@
+{
+    "upstream": {
+        "php": "8.5",
+        "moodle": "5.2"
+    },
+    "minimumPhp": "8.1",
+    "phpVersions": [
+        "8.1",
+        "8.2",
+        "8.3",
+        "8.4",
+        "8.5"
+    ],
+    "latestPhp": "8.5",
+    "moodleVersions": [
+        {
+            "version": "4.5",
+            "minimumPhp": "8.1",
+            "support": "lts",
+            "supportEnds": "2027-10-04"
+        },
+        {
+            "version": "5.1",
+            "minimumPhp": "8.2",
+            "support": "stable",
+            "supportEnds": "2026-10-05"
+        },
+        {
+            "version": "5.2",
+            "minimumPhp": "8.3",
+            "support": "stable",
+            "supportEnds": "2027-04-19"
+        }
+    ]
+}
