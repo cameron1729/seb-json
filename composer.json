@@ -47,11 +47,13 @@
         "support:check": "php tools/php-support.php check",
         "support:update": "php tools/php-support.php update",
         "test": "phpunit",
+        "todos": "php tools/check-todos.php",
         "check": [
             "@cs",
             "@analyse",
             "@test",
-            "@support:check"
+            "@support:check",
+            "@todos"
         ]
     }
 }

@@ -77,7 +77,7 @@ final class SebJson
          * Once the specification and supported SEB implementations converge, this guard can be removed or
          * replaced with the specified encoding.
          *
-         * TODO: Remove all this stuff once upstream SEB-JSON resolves the ambiguity.
+         * TODO(#1): Revisit this workaround once upstream SEB-JSON resolves the ambiguity.
          *
          * @see https://github.com/SafeExamBrowser/seb-win-refactoring/issues/1495 Upstream float serialisation issue.
          * @see https://learn.microsoft.com/en-us/dotnet/api/system.double.tostring?view=netframework-4.8.1
@@ -116,7 +116,7 @@ final class SebJson
             return true;
         }
 
-        // TODO: Use array_all once the generated Moodle support baseline reaches PHP 8.4.
+        // TODO(#2): Use array_all once the generated Moodle support baseline reaches PHP 8.4.
         $and = fn(array $xs, callable $f): callable => fn(bool $all, int|string $k): bool => $all && $f($xs[$k], $k);
         $all = fn(array $items, callable $test): bool => array_reduce(array_keys($items), $and($items, $test), true);
 

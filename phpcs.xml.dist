@@ -4,6 +4,18 @@
 
     <rule ref="PSR12"/>
 
+    <!-- Require source method PHPDoc without legacy type spellings or aligned tag columns. -->
+    <rule ref="Squiz.Commenting.FunctionComment">
+        <include-pattern>*/src/*</include-pattern>
+        <exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName"/>
+        <exclude name="Squiz.Commenting.FunctionComment.InvalidReturn"/>
+        <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamName"/>
+        <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamType"/>
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionCommentThrowTag">
+        <include-pattern>*/src/*</include-pattern>
+    </rule>
+
     <file>src</file>
     <file>tests</file>
     <file>tools</file>

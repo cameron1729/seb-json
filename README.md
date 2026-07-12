@@ -40,7 +40,7 @@ Output:
 
 Safe Exam Browser does not hash ordinary JSON when calculating a Config Key. It hashes a deterministic, JSON-ish byte string commonly referred to as [SEB-JSON](https://safeexambrowser.org/developer/seb-config-key.html).
 
-<!-- Once https://github.com/SafeExamBrowser/SafeExamBrowser-Website/pull/25 is merged and deployed, update the SEB-JSON link above to https://safeexambrowser.org/developer/seb-config-key.html#seb-json. -->
+<!-- TODO(#3): Once https://github.com/SafeExamBrowser/SafeExamBrowser-Website/pull/25 is merged and deployed, update the SEB-JSON link above to https://safeexambrowser.org/developer/seb-config-key.html#seb-json. -->
 
 Despite its name, SEB-JSON is not standard JSON and is not necessarily valid JSON. Most importantly, SEB writes string contents without JSON character escaping. PHP's `json_encode` cannot be configured to do this: quotation marks, backslashes, and control characters are still escaped, changing the bytes that are ultimately hashed.
 
@@ -64,6 +64,8 @@ This distinction matters because Config Keys depend on the exact bytes. Even one
 This package exists because implementations in other projects have repeatedly tried to produce SEB-JSON with ordinary JSON encoders, or by processing ordinary JSON output afterwards. That is easy to get subtly wrong. The encoder in this package is independently authored in PHP, with behaviour determined from the SEB documentation and official implementations. It remains limited to value encoding.
 
 [MDL-78086](https://moodle.atlassian.net/browse/MDL-78086) documents one practical example in Moodle core. Moodle's SEB access rule currently uses `json_encode` with `JSON_UNESCAPED_SLASHES` and `JSON_UNESCAPED_UNICODE`. Those flags preserve forward slashes and characters outside ASCII such as `侃睦`. To preserve literal backslashes, Moodle uses an esoteric workaround where every backslash in a string value is replaced with `ؼҷҍԴ` before encoding, then that marker is changed back to a backslash afterwards (🙉). Quotes and control characters are still escaped normally, so the resulting bytes can still differ from the SEB-JSON bytes expected by Safe Exam Browser.
+
+<!-- TODO(#4): Once MDL-78086 is integrated and Moodle uses this package, rewrite the paragraph above as historical context. -->
 
 Other public implementations show the same trap:
 
