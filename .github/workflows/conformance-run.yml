@@ -4,11 +4,11 @@ on:
   workflow_call:
     inputs:
       windows-ref:
-        description: Safe Exam Browser Windows Git reference.
+        description: SEB for Windows Git reference.
         required: true
         type: string
       macos-ref:
-        description: Safe Exam Browser macOS Git reference.
+        description: SEB for macOS Git reference.
         required: true
         type: string
 
@@ -27,7 +27,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Checkout SEB Windows
+      - name: Checkout SEB for Windows
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           repository: SafeExamBrowser/seb-win-refactoring
@@ -65,7 +65,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Checkout SEB macOS
+      - name: Checkout SEB for macOS
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           repository: SafeExamBrowser/seb-mac

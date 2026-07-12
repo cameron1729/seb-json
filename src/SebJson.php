@@ -18,11 +18,11 @@ final class SebJson
      * Encode a PHP value as Safe Exam Browser SEB-JSON.
      *
      * This encoder intentionally does not use JSON string escaping. SEB-JSON is
-     * a JSON-ish byte format used by Safe Exam Browser config-key generation.
+     * a JSON-ish byte format used when generating Safe Exam Browser Config Keys.
      *
      * This method only encodes values. Callers remain responsible for any
-     * config-key canonicalisation, including key ordering and filtering.
-     * PHP objects are intentionally rejected: SEB-JSON serialises property-list
+     * Config Key canonicalisation, including key ordering and filtering.
+     * PHP objects are intentionally rejected: SEB-JSON serialises property list
      * dictionaries, arrays and scalar values, not arbitrary application objects.
      * Recursive arrays are rejected because SEB-JSON cannot represent references.
      * PHP strings, including dictionary keys, must contain valid UTF-8.
@@ -30,6 +30,10 @@ final class SebJson
      * Null is rejected because the platform value serialisers do not agree.
      * Floats are accepted only when the Windows and macOS value serialisers
      * produce the same representation.
+     *
+     * @param mixed $value The PHP value to encode.
+     * @return string The SEB-JSON byte representation of the value.
+     * @throws InvalidArgumentException If the value cannot be represented consistently as SEB-JSON.
      *
      * phpcs:disable Generic.Files.LineLength.TooLong -- Stable upstream source URLs.
      * @see https://github.com/SafeExamBrowser/seb-win-refactoring/blob/v3.10.1/SafeExamBrowser.Configuration/ConfigurationData/Json.cs Windows value serialiser.
@@ -44,6 +48,13 @@ final class SebJson
         };
     }
 
+    /**
+     * Encode an acyclic PHP value as SEB-JSON.
+     *
+     * @param mixed $value The acyclic PHP value to encode.
+     * @return string The SEB-JSON byte representation of the value.
+     * @throws InvalidArgumentException If the value cannot be represented consistently as SEB-JSON.
+     */
     private static function encodeValue(mixed $value): string
     {
         $entry = fn(int|string $k, mixed $v): string => self::encodeValue((string)$k) . ':' . self::encodeValue($v);
@@ -95,7 +106,9 @@ final class SebJson
     /**
      * Check whether a value is free of recursive array references.
      *
-     * Returns true when no array reference is revisited in its own ancestry.
+     * @param mixed $value The PHP value to inspect.
+     * @param string ...$ancestors Identifiers for array references already present in the current ancestry.
+     * @return bool Whether the value is free of recursive array references.
      */
     private static function isAcyclic(mixed $value, string ...$ancestors): bool
     {

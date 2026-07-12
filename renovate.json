@@ -22,7 +22,7 @@
     "customManagers": [
         {
             "customType": "regex",
-            "description": "Update Safe Exam Browser Windows release references",
+            "description": "Update SEB for Windows release references",
             "managerFilePatterns": [
                 "/^\\.github/workflows/conformance\\.yml$/",
                 "/^README\\.md$/",
@@ -31,7 +31,6 @@
             ],
             "matchStrings": [
                 "windows-ref:\\s+(?<currentDigest>[0-9a-f]{40})\\s+#\\s+(?<currentValue>v?\\d+(?:\\.\\d+)+)",
-                "SEB Win (?<currentValue>v?\\d+(?:\\.\\d+)+) / macOS",
                 "SEB for Windows (?<currentValue>v?\\d+(?:\\.\\d+)+)",
                 "github\\.com/SafeExamBrowser/seb-win-refactoring/blob/(?<currentValue>v?\\d+(?:\\.\\d+)+)/"
             ],
@@ -41,7 +40,7 @@
         },
         {
             "customType": "regex",
-            "description": "Update Safe Exam Browser macOS release references",
+            "description": "Update SEB for macOS release references",
             "managerFilePatterns": [
                 "/^\\.github/workflows/conformance\\.yml$/",
                 "/^README\\.md$/",
@@ -50,7 +49,6 @@
             ],
             "matchStrings": [
                 "macos-ref:\\s+(?<currentDigest>[0-9a-f]{40})\\s+#\\s+(?<currentValue>v?\\d+(?:\\.\\d+)+)",
-                "SEB Win v?\\d+(?:\\.\\d+)+ / macOS (?<currentValue>v?\\d+(?:\\.\\d+)+)",
                 "SEB for macOS (?<currentValue>v?\\d+(?:\\.\\d+)+)",
                 "github\\.com/SafeExamBrowser/seb-mac/blob/(?<currentValue>v?\\d+(?:\\.\\d+)+)/"
             ],

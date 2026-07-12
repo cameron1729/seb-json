@@ -1,7 +1,7 @@
 # SEB-JSON
 
 [![CI](https://github.com/cameron1729/seb-json/actions/workflows/ci.yml/badge.svg)](https://github.com/cameron1729/seb-json/actions/workflows/ci.yml)
-[![SEB Win v3.10.1 / macOS 3.6.1](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml/badge.svg)](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml)
+[![SEB for Windows v3.10.1 / SEB for macOS 3.6.1](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml/badge.svg)](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml)
 [![PHP >=8.1](https://img.shields.io/badge/PHP-%3E%3D8.1-777BB4?logo=php&logoColor=white)](https://www.php.net/)
 [![Tests](https://img.shields.io/badge/tests-PHPUnit-3f9f3f)](https://phpunit.de/)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/cameron1729/seb-json/actions/workflows/ci.yml)
@@ -40,9 +40,11 @@ Output:
 
 Safe Exam Browser does not hash ordinary JSON when calculating a Config Key. It hashes a deterministic, JSON-ish byte string commonly referred to as [SEB-JSON](https://safeexambrowser.org/developer/seb-config-key.html).
 
+<!-- Once https://github.com/SafeExamBrowser/SafeExamBrowser-Website/pull/25 is merged and deployed, update the SEB-JSON link above to https://safeexambrowser.org/developer/seb-config-key.html#seb-json. -->
+
 Despite its name, SEB-JSON is not standard JSON and is not necessarily valid JSON. Most importantly, SEB writes string contents without JSON character escaping. PHP's `json_encode` cannot be configured to do this: quotation marks, backslashes, and control characters are still escaped, changing the bytes that are ultimately hashed.
 
-The [SEB Config Key documentation](https://safeexambrowser.org/developer/seb-config-key.html) explicitly says not to add character escaping. The [current Windows reference implementation](https://github.com/SafeExamBrowser/seb-win-refactoring/blob/v3.10.1/SafeExamBrowser.Configuration/ConfigurationData/Json.cs) does this literally: it writes a string by writing the opening quote, the raw string contents, and the closing quote.
+The [SEB Config Key documentation](https://safeexambrowser.org/developer/seb-config-key.html) explicitly says not to add character escaping. The [current SEB for Windows implementation](https://github.com/SafeExamBrowser/seb-win-refactoring/blob/v3.10.1/SafeExamBrowser.Configuration/ConfigurationData/Json.cs) does this literally: it writes a string by writing the opening quote, the raw string contents, and the closing quote.
 
 For example, the PHP value:
 
@@ -92,7 +94,7 @@ Resources, `null`, integers outside the shared range, `NAN`, `INF` and floats re
 
 `null` is intentionally rejected: it is not a property list value and the official Windows and macOS serialisers do not produce the same representation for it.
 
-Common SEB values such as `0.1`, `0.2` and `1.0` have a shared representation and are accepted. Ambiguous high precision values and scientific notation are rejected instead of silently producing bytes which differ between platforms. Float output does not depend on PHP's `precision` setting.
+Common SEB values such as `0.1`, `0.2` and `1.0` have a shared representation and are accepted. Ambiguous high precision values and scientific notation are rejected instead of silently producing bytes which differ between platforms. The underlying ambiguity is tracked upstream in [Safe Exam Browser issue #1495](https://github.com/SafeExamBrowser/seb-win-refactoring/issues/1495). Float output does not depend on PHP's `precision` setting.
 
 PHP arrays cannot distinguish an empty list from an empty SEB dictionary, so `[]` is encoded as an empty list.
 
