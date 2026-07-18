@@ -28,7 +28,7 @@ jobs:
         uses: docker://rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
 
       - name: Audit workflow security
-        uses: docker://ghcr.io/zizmorcore/zizmor:1.26.1@sha256:d1117e5dbd9ee4970644067b534ab6ab50371f3c6f7f4d05446eb603a6e78f48
+        uses: docker://ghcr.io/zizmorcore/zizmor:1.27.0@sha256:5800c8d5e83263d68a8874989b0eb3939e177540e9395de48158d24656141ee9
         with:
           args: --offline .
 
