@@ -2,6 +2,10 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
+    tags:
+      - 'v*'
   pull_request:
   workflow_dispatch:
 
@@ -10,7 +14,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   automation:

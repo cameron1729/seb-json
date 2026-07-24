@@ -2,6 +2,10 @@ name: SEB for Windows v3.10.2 / SEB for macOS 3.6.1
 
 on:
   push:
+    branches:
+      - main
+    tags:
+      - 'v*'
   pull_request:
   workflow_dispatch:
 
@@ -10,7 +14,7 @@ permissions:
 
 concurrency:
   group: conformance-${{ github.head_ref || github.ref_name }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   conformance:
