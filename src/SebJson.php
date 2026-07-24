@@ -36,7 +36,7 @@ final class SebJson
      * @throws InvalidArgumentException If the value cannot be represented consistently as SEB-JSON.
      *
      * phpcs:disable Generic.Files.LineLength.TooLong -- Stable upstream source URLs.
-     * @see https://github.com/SafeExamBrowser/seb-win-refactoring/blob/v3.10.1/SafeExamBrowser.Configuration/ConfigurationData/Json.cs Windows value serialiser.
+     * @see https://github.com/SafeExamBrowser/seb-win-refactoring/blob/v3.10.2/SafeExamBrowser.Configuration/ConfigurationData/Json.cs Windows value serialiser.
      * @see https://github.com/SafeExamBrowser/seb-mac/blob/3.6.1/Classes/Cryptography/SEBCryptor.m macOS value serialiser.
      * phpcs:enable Generic.Files.LineLength.TooLong
      */
