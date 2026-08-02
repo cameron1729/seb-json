@@ -177,6 +177,13 @@
             }
         },
         {
+            "name": "float-fifty-six-hundredths",
+            "value": {
+                "type": "float",
+                "hex": "3fe1eb851eb851ec"
+            }
+        },
+        {
             "name": "float-high-precision",
             "value": {
                 "type": "float",

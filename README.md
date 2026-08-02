@@ -1,7 +1,7 @@
 # SEB-JSON
 
 [![CI](https://github.com/cameron1729/seb-json/actions/workflows/ci.yml/badge.svg)](https://github.com/cameron1729/seb-json/actions/workflows/ci.yml)
-[![SEB for Windows v3.10.2 / SEB for macOS 3.6.1](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml/badge.svg)](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml)
+[![SEB for Windows v3.10.2 / SEB for macOS 3.7](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml/badge.svg)](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml)
 [![PHP >=8.1](https://img.shields.io/badge/PHP-%3E%3D8.1-777BB4?logo=php&logoColor=white)](https://www.php.net/)
 [![Tests](https://img.shields.io/badge/tests-PHPUnit-3f9f3f)](https://phpunit.de/)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/cameron1729/seb-json/actions/workflows/ci.yml)
@@ -81,7 +81,7 @@ Other public implementations show the same trap:
 - List arrays for SEB arrays
 - Strings
 - Integers from `-2147483648` through `2147483647`
-- Finite floating point numbers with an unambiguous SEB representation across platforms
+- Finite floating point numbers, encoded using the invariant G15 format shared by the supported SEB releases
 - Booleans
 
 String values and string keys must contain valid UTF-8.
@@ -92,11 +92,11 @@ This is intentional: SEB-JSON serialises property list values and does not defin
 
 Recursive PHP arrays are not accepted because SEB-JSON has no representation for references. Repeated references which do not form a cycle are encoded by value at each position.
 
-Resources, `null`, integers outside the shared range, `NAN`, `INF` and floats represented differently by the Windows and macOS SEB implementations throw `InvalidArgumentException`.
+Resources, `null`, integers outside the shared range, `NAN` and `INF` throw `InvalidArgumentException`.
 
 `null` is intentionally rejected: it is not a property list value and the official Windows and macOS serialisers do not produce the same representation for it.
 
-Common SEB values such as `0.1`, `0.2` and `1.0` have a shared representation and are accepted. Ambiguous high precision values and scientific notation are rejected instead of silently producing bytes which differ between platforms. The underlying ambiguity is tracked upstream in [Safe Exam Browser issue #1495](https://github.com/SafeExamBrowser/seb-win-refactoring/issues/1495). Float output does not depend on PHP's `precision` setting.
+The currently supported Windows and macOS releases share an invariant G15 representation: up to 15 significant digits, scientific notation for decimal exponents below `-4` or at least `15`, and `0` for both positive and negative zero. This is an interim upstream compatibility rule. SEB's proposed move to RFC 8785 number formatting for SEB 4.0 remains tracked in [Safe Exam Browser issue #1495](https://github.com/SafeExamBrowser/seb-win-refactoring/issues/1495). Float output does not depend on PHP's `precision` setting.
 
 PHP arrays cannot distinguish an empty list from an empty SEB dictionary, so `[]` is encoded as an empty list.
 
@@ -133,7 +133,7 @@ The SEB-JSON encoding algorithm appears stable across other modern SEB releases,
 Reference implementations:
 
 - SEB for Windows v3.10.2: <https://github.com/SafeExamBrowser/seb-win-refactoring/blob/v3.10.2/SafeExamBrowser.Configuration/ConfigurationData/Json.cs>
-- SEB for macOS 3.6.1: <https://github.com/SafeExamBrowser/seb-mac/blob/3.6.1/Classes/Cryptography/SEBCryptor.m>
+- SEB for macOS 3.7: <https://github.com/SafeExamBrowser/seb-mac/blob/3.7/Classes/Cryptography/SEBCryptor.m>
 
 This does not target older `seb-win` code paths that use .NET's [`JavaScriptSerializer`](https://learn.microsoft.com/en-us/dotnet/api/system.web.script.serialization.javascriptserializer.serialize?view=netframework-4.8.1), which produces ordinary JSON strings.
 
