@@ -1,7 +1,7 @@
 # SEB-JSON
 
 [![CI](https://github.com/cameron1729/seb-json/actions/workflows/ci.yml/badge.svg)](https://github.com/cameron1729/seb-json/actions/workflows/ci.yml)
-[![SEB for Windows v3.10.2 / SEB for macOS 3.6.1](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml/badge.svg)](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml)
+[![SEB for Windows v3.10.2 / SEB for macOS 3.7](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml/badge.svg)](https://github.com/cameron1729/seb-json/actions/workflows/conformance.yml)
 [![PHP >=8.1](https://img.shields.io/badge/PHP-%3E%3D8.1-777BB4?logo=php&logoColor=white)](https://www.php.net/)
 [![Tests](https://img.shields.io/badge/tests-PHPUnit-3f9f3f)](https://phpunit.de/)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/cameron1729/seb-json/actions/workflows/ci.yml)
@@ -133,7 +133,7 @@ The SEB-JSON encoding algorithm appears stable across other modern SEB releases,
 Reference implementations:
 
 - SEB for Windows v3.10.2: <https://github.com/SafeExamBrowser/seb-win-refactoring/blob/v3.10.2/SafeExamBrowser.Configuration/ConfigurationData/Json.cs>
-- SEB for macOS 3.6.1: <https://github.com/SafeExamBrowser/seb-mac/blob/3.6.1/Classes/Cryptography/SEBCryptor.m>
+- SEB for macOS 3.7: <https://github.com/SafeExamBrowser/seb-mac/blob/3.7/Classes/Cryptography/SEBCryptor.m>
 
 This does not target older `seb-win` code paths that use .NET's [`JavaScriptSerializer`](https://learn.microsoft.com/en-us/dotnet/api/system.web.script.serialization.javascriptserializer.serialize?view=netframework-4.8.1), which produces ordinary JSON strings.
 
