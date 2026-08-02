@@ -331,8 +331,8 @@ final class SebJsonTest extends TestCase
         ]));
     }
 
-    #[DataProvider('unambiguousFloatProvider')]
-    public function testEncodesUnambiguousCrossPlatformFloats(float $value, string $expected): void
+    #[DataProvider('floatProvider')]
+    public function testEncodesFloatsUsingCurrentCrossPlatformFormat(float $value, string $expected): void
     {
         $this->assertSame($expected, SebJson::encode($value));
     }
@@ -340,46 +340,29 @@ final class SebJsonTest extends TestCase
     /**
      * @return array<string, array{float, string}>
      */
-    public static function unambiguousFloatProvider(): array
+    public static function floatProvider(): array
     {
         return [
             'zero' => [0.0, '0'],
+            'negative zero' => [-0.0, '0'],
             'one tenth' => [0.1, '0.1'],
             'one fifth' => [0.2, '0.2'],
             'one' => [1.0, '1'],
             'quarter' => [0.25, '0.25'],
             'negative one tenth' => [-0.1, '-0.1'],
             'simple decimal' => [0.12345, '0.12345'],
+            'fifty-six hundredths' => [0.56, '0.56'],
+            'high precision' => [1.2345678901234567, '1.23456789012346'],
             'fixed lower boundary' => [1.0E-4, '0.0001'],
+            'small scientific notation' => [1.0E-5, '1E-05'],
+            'smaller scientific notation' => [1.0E-6, '1E-06'],
             'large fixed value' => [1.0E+14, '100000000000000'],
-        ];
-    }
-
-    #[DataProvider('ambiguousFloatProvider')]
-    public function testRejectsAmbiguousCrossPlatformFloats(float $value): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('unambiguous cross-platform');
-
-        SebJson::encode($value);
-    }
-
-    /**
-     * @return array<string, array{float}>
-     */
-    public static function ambiguousFloatProvider(): array
-    {
-        return [
-            'negative zero' => [-0.0],
-            'high precision' => [1.2345678901234567],
-            'small scientific notation' => [1.0E-5],
-            'smaller scientific notation' => [1.0E-6],
-            'Windows scientific boundary' => [1.0E+15],
-            'large scientific boundary' => [1.0E+16],
-            'large scientific notation' => [1.0E+20],
-            'minimum normal' => [PHP_FLOAT_MIN],
-            'minimum subnormal' => [5.0E-324],
-            'maximum finite' => [PHP_FLOAT_MAX],
+            'Windows scientific boundary' => [1.0E+15, '1E+15'],
+            'large scientific boundary' => [1.0E+16, '1E+16'],
+            'large scientific notation' => [1.0E+20, '1E+20'],
+            'minimum normal' => [PHP_FLOAT_MIN, '2.2250738585072E-308'],
+            'minimum subnormal' => [5.0E-324, '4.94065645841247E-324'],
+            'maximum finite' => [PHP_FLOAT_MAX, '1.79769313486232E+308'],
         ];
     }
 

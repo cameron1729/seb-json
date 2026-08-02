@@ -28,12 +28,12 @@ final class SebJson
      * PHP strings, including dictionary keys, must contain valid UTF-8.
      * Integers are limited to the signed 32-bit range shared by both platforms.
      * Null is rejected because the platform value serialisers do not agree.
-     * Floats are accepted only when the Windows and macOS value serialisers
-     * produce the same representation.
+     * Finite floats use the invariant G15 representation shared by the
+     * supported Windows and macOS value serialisers.
      *
      * @param mixed $value The PHP value to encode.
      * @return string The SEB-JSON byte representation of the value.
-     * @throws InvalidArgumentException If the value cannot be represented consistently as SEB-JSON.
+     * @throws InvalidArgumentException If the value cannot be represented as SEB-JSON.
      *
      * phpcs:disable Generic.Files.LineLength.TooLong -- Stable upstream source URLs.
      * @see https://github.com/SafeExamBrowser/seb-win-refactoring/blob/v3.10.2/SafeExamBrowser.Configuration/ConfigurationData/Json.cs Windows value serialiser.
@@ -53,7 +53,7 @@ final class SebJson
      *
      * @param mixed $value The acyclic PHP value to encode.
      * @return string The SEB-JSON byte representation of the value.
-     * @throws InvalidArgumentException If the value cannot be represented consistently as SEB-JSON.
+     * @throws InvalidArgumentException If the value cannot be represented as SEB-JSON.
      */
     private static function encodeValue(mixed $value): string
     {
@@ -66,29 +66,6 @@ final class SebJson
         $outOfRangeInteger = fn(int $number): bool => $number < -2_147_483_648 || $number > 2_147_483_647;
         $integerRangeMessage = 'Integer is outside the cross-platform SEB-JSON range.';
 
-        /**
-         * Windows formats doubles with .NET Framework's Double.ToString (invariant G15), emulated by %.15H,
-         * while macOS formats an NSNumber with its Foundation description, emulated by %.16h.
-         *
-         * A float is safe to encode if and only if these emulations produce identical SEB-JSON bytes. Negative zero
-         * is rejected separately because PHP's formatters do not expose the upstream platform disagreement for it.
-         *
-         * Rejecting these mismatches is a compatibility workaround for the ambiguous SEB-JSON specification.
-         * Once the specification and supported SEB implementations converge, this guard can be removed or
-         * replaced with the specified encoding.
-         *
-         * TODO(#1): Revisit this workaround once upstream SEB-JSON resolves the ambiguity.
-         *
-         * @see https://github.com/SafeExamBrowser/seb-win-refactoring/issues/1495 Upstream float serialisation issue.
-         * @see https://learn.microsoft.com/en-us/dotnet/api/system.double.tostring?view=netframework-4.8.1
-         * @see https://developer.apple.com/documentation/foundation/nsnumber/description(withlocale:)
-         */
-        $float = fn(float $number): string => $number == 0.0 ? '0' : sprintf('%.15H', $number);
-        $negativeZero = fn(float $number): bool => $number == 0.0 && fdiv(1.0, $number) < 0;
-        $platformsDiffer = fn(float $number): bool => sprintf('%.15H', $number) !== sprintf('%.16h', $number);
-        $ambiguousFloat = fn(float $number): bool => $negativeZero($number) || $platformsDiffer($number);
-        $ambiguousFloatMessage = 'Float does not have an unambiguous cross-platform SEB-JSON representation.';
-
         return match (true) {
             is_array($value) => array_is_list($value) ? $list($value) : $map($value),
             is_string($value) && $invalidUtf8($value) => throw new InvalidArgumentException($invalidUtf8Message),
@@ -96,11 +73,35 @@ final class SebJson
             is_int($value) && $outOfRangeInteger($value) => throw new InvalidArgumentException($integerRangeMessage),
             is_int($value) => (string)$value,
             is_float($value) && !is_finite($value) => throw new InvalidArgumentException('Cannot encode NAN or INF.'),
-            is_float($value) && $ambiguousFloat($value) => throw new InvalidArgumentException($ambiguousFloatMessage),
-            is_float($value) => $float($value),
+            is_float($value) => self::encodeFloat($value),
             is_bool($value) => $value ? 'true' : 'false',
             default => throw new InvalidArgumentException(sprintf('Cannot encode %s.', get_debug_type($value))),
         };
+    }
+
+    /**
+     * Encode a finite float using the invariant G15 format shared by the supported SEB releases.
+     *
+     * Windows uses .NET Framework's Double.ToString with invariant formatting. macOS 3.7 deliberately matches it
+     * with %.15g, an uppercase exponent and zero normalisation. PHP's locale-independent %.15H has the same
+     * precision and fixed/scientific threshold, but retains a redundant .0 in scientific notation and does not pad
+     * a single-digit exponent. Normalise those differences to produce the same bytes as both reference encoders.
+     *
+     * This is SEB's interim G15 behaviour, not the RFC 8785 number format proposed for SEB 4.0.
+     *
+     * TODO(#1): Revisit float encoding when upstream SEB adopts a normative number format.
+     *
+     * @param float $number The finite float to encode.
+     * @return string The G15 representation of the float.
+     *
+     * @see https://github.com/SafeExamBrowser/seb-win-refactoring/issues/1495 Upstream float serialisation issue.
+     * @see https://learn.microsoft.com/en-us/dotnet/api/system.double.tostring?view=netframework-4.8.1
+     */
+    private static function encodeFloat(float $number): string
+    {
+        $formatted = $number == 0.0 ? '0' : sprintf('%.15H', $number);
+        $formatted = str_replace('.0E', 'E', $formatted);
+        return preg_replace('/E([+-])(\d)$/', 'E${1}0${2}', $formatted) ?? $formatted;
     }
 
     /**
