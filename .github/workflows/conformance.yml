@@ -1,4 +1,4 @@
-name: SEB for Windows v3.10.2 / SEB for macOS 3.7
+name: SEB for Windows v3.10.2 / SEB for macOS 3.7.1
 
 on:
   push:
@@ -21,4 +21,4 @@ jobs:
     uses: ./.github/workflows/conformance-run.yml
     with:
       windows-ref: 397f8e124387c54a9a770809003dd2e31946dcd5 # v3.10.2
-      macos-ref: 88b7f8df3c96781197efe400b8a2cbd818524736 # 3.7
+      macos-ref: a1e3f786aac4aa2e827998dcf8ca139f2c5205a9 # 3.7.1
