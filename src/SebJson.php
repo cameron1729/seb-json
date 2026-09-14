@@ -37,7 +37,7 @@ final class SebJson
      *
      * phpcs:disable Generic.Files.LineLength.TooLong -- Stable upstream source URLs.
      * @see https://github.com/SafeExamBrowser/seb-win-refactoring/blob/v3.10.2/SafeExamBrowser.Configuration/ConfigurationData/Json.cs Windows value serialiser.
-     * @see https://github.com/SafeExamBrowser/seb-mac/blob/3.7/Classes/Cryptography/SEBCryptor.m macOS value serialiser.
+     * @see https://github.com/SafeExamBrowser/seb-mac/blob/3.7.1/Classes/Cryptography/SEBCryptor.m macOS value serialiser.
      * phpcs:enable Generic.Files.LineLength.TooLong
      */
     public static function encode(mixed $value): string
