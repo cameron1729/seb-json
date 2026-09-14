@@ -74,6 +74,9 @@ extract_method \
     '- (NSComparisonResult)caseInsensitiveOrdinalCompare:(NSString *)string {' \
     "$build_dir/upstream-caseInsensitiveOrdinalCompare.inc"
 extract_method \
+    '- (NSString *)jsonEscapedString:(NSString *)string' \
+    "$build_dir/upstream-jsonEscapedString.inc"
+extract_method \
     '- (NSString *)jsonStringForObject:(id)object' \
     "$build_dir/upstream-jsonStringForObject.inc"
 extract_method \

@@ -60,6 +60,7 @@
 
 @implementation SEBReferenceEncoder
 
+#include "upstream-jsonEscapedString.inc"
 #include "upstream-jsonStringForObject.inc"
 #include "upstream-getConfigKeyDictionaryForKey.inc"
 #include "upstream-getConfigKeyArrayForKey.inc"

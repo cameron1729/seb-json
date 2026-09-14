@@ -5,7 +5,7 @@ The PHP package and independently authored test material in this repository are 
 The conformance workflow downloads code from the official Safe Exam Browser repositories at test time. Different releases may use different versions of the Mozilla Public License. The currently pinned source files and their controlling licence notices are:
 
 - [SEB for Windows v3.10.2 source and licence notice](https://github.com/SafeExamBrowser/seb-win-refactoring/blob/v3.10.2/SafeExamBrowser.Configuration/ConfigurationData/Json.cs)
-- [SEB for macOS 3.7 source and licence notice](https://github.com/SafeExamBrowser/seb-mac/blob/3.7/Classes/Cryptography/SEBCryptor.m)
+- [SEB for macOS 3.7.1 source and licence notice](https://github.com/SafeExamBrowser/seb-mac/blob/3.7.1/Classes/Cryptography/SEBCryptor.m)
 
 The notice in each downloaded source file governs that file. The workflow does not relicense upstream code, and generated macOS fragments preserve the header from the downloaded source file.
 
