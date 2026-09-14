@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   conformance:
-    uses: ./.github/workflows/conformance-run.yml
+    uses: $/.github/workflows/conformance-run.yml
     with:
       windows-ref: 397f8e124387c54a9a770809003dd2e31946dcd5 # v3.10.2
       macos-ref: 88b7f8df3c96781197efe400b8a2cbd818524736 # 3.7

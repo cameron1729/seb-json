@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   conformance:
-    uses: ./.github/workflows/conformance-run.yml
+    uses: $/.github/workflows/conformance-run.yml
     with:
       windows-ref: master
       macos-ref: main
