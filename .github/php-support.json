@@ -1,7 +1,7 @@
 {
     "upstream": {
         "php": "8.5",
-        "moodle": "5.2"
+        "moodle": "5.3"
     },
     "minimumPhp": "8.1",
     "phpVersions": [
